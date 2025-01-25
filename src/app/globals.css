@@ -19,3 +19,9 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@layer utilities {
+  .active-chat {
+    @apply bg-red-600 text-white p-4 rounded-lg shadow-lg;
+  }
+}
