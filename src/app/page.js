@@ -1,9 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Avatar } from "@heroui/react";
+import { useData } from "./context/DataContext";
 import Chat from "./components/chat";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import InputBar from "./components/inputBar";
 import ChatHistory from "./components/chatHistory";
 import LogoSection from "./components/logoSection";
@@ -50,74 +50,12 @@ const categorizeChat = (chatTime) => {
   return "Earlier";
 };
 
-const conversations = [
-  {
-    id: 1,
-    userMessage: "Hello! Can you help me with learning JavaScript?",
-    agentMessage:
-      "Of course! JavaScript is a great language. What would you like to start with?",
-  },
-  {
-    id: 2,
-    userMessage: "What's the difference between `let`, `const`, and `var`?",
-    agentMessage:
-      "`let` and `const` are block-scoped and introduced in ES6, while `var` is function-scoped and considered outdated. Use `const` for values that don't change, and `let` otherwise.",
-  },
-  {
-    id: 3,
-    userMessage: "Can you explain what closures are in JavaScript?",
-    agentMessage:
-      "Sure! A closure is when a function remembers and accesses variables from its lexical scope, even when it's executed outside that scope.",
-  },
-  {
-    id: 4,
-    userMessage: "What is the purpose of promises?",
-    agentMessage:
-      "Promises are used to handle asynchronous operations in JavaScript, allowing you to manage actions that may take time, like fetching data from an API.",
-  },
-  {
-    id: 5,
-    userMessage: "How do I create an async function?",
-    agentMessage:
-      "You can create an async function by using the `async` keyword before a function declaration. For example: `async function fetchData() { /* code */ }`.",
-  },
-  {
-    id: 6,
-    userMessage:
-      "What's the difference between synchronous and asynchronous code?",
-    agentMessage:
-      "Synchronous code executes line by line, blocking the next operation until the current one finishes. Asynchronous code, on the other hand, doesn't block the program and allows other operations to run while waiting for tasks to complete.",
-  },
-  {
-    id: 7,
-    userMessage: "How can I use the Fetch API to get data from an API?",
-    agentMessage:
-      "You can use `fetch('https://api.example.com')` to send a request. It returns a promise, and you can chain `.then()` or use `async/await` to handle the response.",
-  },
-  {
-    id: 8,
-    userMessage: "What's the difference between `==` and `===`?",
-    agentMessage:
-      "`==` checks for equality after type conversion, while `===` checks for strict equality without type conversion. It's safer to use `===`.",
-  },
-  {
-    id: 9,
-    userMessage: "Can you suggest a good project for learning JavaScript?",
-    agentMessage:
-      "Sure! Building a to-do list app is a great beginner project. It will teach you about DOM manipulation, event handling, and local storage.",
-  },
-  {
-    id: 10,
-    userMessage: "What are some common JavaScript frameworks or libraries?",
-    agentMessage:
-      "Some popular ones are React, Angular, and Vue for front-end development. Node.js is commonly used for back-end development.",
-  },
-];
-
 export default function Home() {
+  const { conversationHistory, setConversationHistory, data } = useData();
+  const [isLoading, setIsLoading] = useState(true)
   const router = useRouter();
-
-  const categorizedChats = dummyChatHistory.reduce((acc, chat) => {
+  
+  const categorizedChats = conversationHistory.reduce((acc, chat) => {
     const category = categorizeChat(chat.time);
     if (!acc[category]) {
       acc[category] = [];
@@ -126,9 +64,31 @@ export default function Home() {
     return acc;
   }, {});
 
-  // console.log(categorizedChats);
-
-  const [activeChat, setActiveChat] = useState(dummyChatHistory[0].id);
+  useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const response = await fetch(
+            `http://127.0.0.1:8000/v1/get-conversation-history`
+          );
+          if (!response.ok) {
+            throw new Error(`Error fetching data: ${response.status}`);
+          }
+          const fetchedData = await response.json();
+          
+          if (fetchedData && fetchedData.length > 0) {
+            setConversationHistory(fetchedData);
+          } else {
+            setConversationHistory([]);
+          }
+        } catch (error) {
+          console.error("Failed to fetch data:", error);
+          setConversationHistory([]); // Handle gracefully by initializing as an empty chat
+        }
+      };
+  
+      fetchData();
+    }, []);
+  
 
   return (
     <div className="relative h-full w-full bg-blue-800 grid grid-cols-7">
@@ -141,14 +101,14 @@ export default function Home() {
       <div className="col-span-6 h-full bg-white relative flex flex-col mx-auto w-full">
         <LogoSection />
         <div className="chat h-full relative mt-2">
-          {conversations.map((conversation) => {
+          {data.map((conversation) => {
             return (
               <div
                 key={conversation.id}
                 className="chat-element flex flex-col w-[40vw] mx-auto gap-8  mb-8"
               >
-                <Chat type="user" msg={conversation.userMessage} />
-                <Chat type="agent" msg={conversation.agentMessage} />
+                {conversation.userMessage && <Chat type="user" msg={conversation.userMessage} />}
+                {<Chat type="agent" msg={conversation.agentMessage} isLoading={!conversation?.agentMessage}/>}
               </div>
             );
           })}

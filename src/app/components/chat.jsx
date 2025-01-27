@@ -1,7 +1,10 @@
+"use client";
+import Markdown from "react-markdown";
+
 import React from "react";
 import { Avatar } from "@heroui/react";
 
-const Chat = ({ type, cls, msg }) => {
+const Chat = ({ type, cls, msg, isLoading }) => {
   if (type === "agent") {
     return (
       <div className={`flex gap-4 ${cls}`}>
@@ -12,7 +15,7 @@ const Chat = ({ type, cls, msg }) => {
           />
         </div>
         <div className="bg-white">
-          <p>{msg}</p>
+          <Markdown>{isLoading ? "processing your request..." : msg}</Markdown>
         </div>
       </div>
     );

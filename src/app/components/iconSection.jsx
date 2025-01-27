@@ -1,11 +1,17 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import React from "react";
+import { useData } from "../context/DataContext";
 
 const IconSection = () => {
-  const generateChatId = () => {
-    const chatId = crypto.randomUUID();
-    console.log(chatId);
+  const { generateChatId } = useData();
+  const router = useRouter()
+  const createNewChat = () => {
+    const newThreadId = generateChatId();
+    router.push(`/chat/${newThreadId}`);
   };
-  
+
   return (
     <div className="icon-section flex justify-between p-4 ">
       <svg
@@ -24,7 +30,7 @@ const IconSection = () => {
         ></path>
       </svg>
       <svg
-        onClick={generateChatId}
+        onClick={createNewChat}
         width="24"
         height="24"
         viewBox="0 0 24 24"

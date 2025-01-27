@@ -2,11 +2,22 @@
 
 import React, { useState } from "react";
 import { FaArrowUp } from "react-icons/fa";
+import { useData } from "../context/DataContext";
 
 export default function InputBar() {
   const [inputText, setInputText] = useState("");
   const [inputHeight, setInputHeight] = useState("auto");
   const [scrollable, setScrollable] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const {
+    data,
+    addDataEntry,
+    updateLastDataEntry,
+    updateThreadId,
+    threadId,
+    generateChatId,
+    updateChatHistory,
+  } = useData();
 
   const handleInputChange = (e) => {
     const target = e.target;
@@ -22,13 +33,87 @@ export default function InputBar() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setIsLoading(true);
+    setInputText(""); // Reset input after submitting
+    setInputHeight("auto"); // Reset height
+    setScrollable(false);
+
     if (inputText.trim()) {
-      console.log("User message:", inputText);
-      setInputText(""); // Reset input after submitting
-      setInputHeight("auto"); // Reset height
-      setScrollable(false);
+      const convId = generateChatId();
+      addDataEntry({ id: convId, userMessage: inputText });
+
+      let currentThreadId = threadId;
+
+      if (!threadId) {
+        const newThreadId = generateChatId();
+        await updateThreadId(newThreadId);
+        currentThreadId = newThreadId;
+        window.history.replaceState(null, "", `/chat/${newThreadId}`);
+      }
+
+      const checkInitialData = data.length;
+
+      try {
+        const response = await fetch(
+          "http://127.0.0.1:8000/v1/query-verse-agent",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              query: inputText,
+              thread_id: currentThreadId,
+            }),
+          }
+        );
+
+        if (!response.ok) {
+          console.error("Failed to send message:", response.statusText);
+        } else {
+          const agent_response = await response.json();
+          updateLastDataEntry({ agentMessage: agent_response.agent_response });
+
+          if (checkInitialData == 0) {
+
+            const newChatInfo = {
+              thread_id: currentThreadId,
+              chat: inputText,
+            };
+            try {
+              const response = await fetch(
+                "http://127.0.0.1:8000/v1/add-conversation-history",
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(newChatInfo),
+                }
+              );
+    
+              if (!response.ok) {
+                console.error("Failed to send message:", response.statusText);
+              } else {
+                const add_chat_response = await response.json();
+                updateChatHistory(add_chat_response.chat);
+              }
+            } catch (error) {
+              console.error("Error sending message:", error);
+            }
+          }
+          
+        }
+      } catch (error) {
+        console.error("Error sending message:", error);
+      }
+
+
+
+      setIsLoading(false);
     }
   };
 
@@ -47,7 +132,8 @@ export default function InputBar() {
         />
         <button
           type="submit"
-          className="absolute right-3 bottom-3 bg-black text-white px-2 py-2 rounded-full hover:bg-blue-600"
+          disabled={isLoading}
+          className={`absolute right-3 bottom-3 bg-black text-white px-2 py-2 rounded-full hover:opacity-75 disabled:opacity-75 ${isLoading && "cursor-not-allowed"}`}
         >
           <FaArrowUp />
         </button>
