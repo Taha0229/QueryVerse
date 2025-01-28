@@ -11,7 +11,7 @@ const Chat = ({ type, cls, msg, isLoading }) => {
         <div>
           <Avatar
             size="sm"
-            src="https://i.pravatar.cc/150?u=a04258114e29026708c"
+            src="/ai_logo.svg"
           />
         </div>
         <div className="bg-white">
