@@ -6,8 +6,10 @@
 
 QueryVerse is a multi-agent system which combines three specialized agents - RAG, SQL and Conversational Agent to streamline inventory analytics using natural language, making it feel like you're directly talking with your inventory.  
 
-**Access the frontend from** [here]("https://query-verse-nine.vercel.app/")  
-**Access the backend from** [here]("https://queryverse-backend.onrender.com/docs") (Swagger UI)
+**The dummy SQLite has three tables Users, Orders, and Products.**
+
+**Access the frontend from** [here](https://query-verse-nine.vercel.app/)  
+**Access the backend from** [here](https://queryverse-backend.onrender.com/docs) (Swagger UI)
 
 ## What's Special?
 
@@ -15,7 +17,7 @@ QueryVerse is a multi-agent system which combines three specialized agents - RAG
    1. **Context Relevance:** Whether the retrieved document is relevant for the asked question or not.
    2. **Groundedness:** Whether the generated response is hallucination or not.
    3. **Answer Relevance:** Wether the generated response is addressing the asked question or not.
-2. **Collaborative Agents:** ([best performing demonstration]("https://smith.langchain.com/public/4d1a443a-e679-4c9d-b73c-282b3858628b/r")) The system is designed and implemented in such a way that to answer a complex query, all the agents can participate and handle their part in the query.  For instance, a query like **get me details of the products that Alice has purchased** would activate the SQL agent to fetch a list of products purchased by Alice followed by the RAG agent to enrich this data by generating comprehensive details for those specific products, ensuring a complete and accurate response.
+2. **Collaborative Agents:** ([best performing demonstration](https://smith.langchain.com/public/4d1a443a-e679-4c9d-b73c-282b3858628b/r)) The system is designed and implemented in such a way that to answer a complex query, all the agents can participate and handle their part in the query.  For instance, a query like **get me details of the products that Alice has purchased** would activate the SQL agent to fetch a list of products purchased by Alice followed by the RAG agent to enrich this data by generating comprehensive details for those specific products, ensuring a complete and accurate response.
 3. **Threads, Continued Conversation and Chat History:** Just like ChatGPT's threads, QueryVerse also manages threads enabling continued conversation and chat history.
 4. **Web Searching Capabilities:** The RAG is paired with web searching tools so that when relevant documents are not found, it leverages web search to find relevant pieces of information for robust generation.
 5. **Text-to-SQL with error handling:** The Text2SQL implementation has dual level SQL query generation check paired with effective tool error handling
@@ -63,14 +65,14 @@ Will update more later
 
 To run the whole project i.e. front-end and back-end locally, you need to follow and setup both individually as shown below.
 
-GitHub repo for the [front-end]("https://github.com/Taha0229/QueryVerse")
-GitHub repo for the [back-end]("https://github.com/Taha0229/QueryVerse-backend")
+GitHub repo for the [front-end](https://github.com/Taha0229/QueryVerse)
+GitHub repo for the [back-end](https://github.com/Taha0229/QueryVerse-backend)
 
 ### Steps for setting up the front-end
 
 ## Step 1: Fork and clone the frontend
 
-Fork the repo and clone the  [frontend repo]("https://github.com/Taha0229/QueryVerse") on your local machine using, so you can modify and push to your own repo/code:
+Fork the repo and clone the  [frontend repo](https://github.com/Taha0229/QueryVerse) on your local machine using, so you can modify and push to your own repo/code:
 `git clone <url of forked repo>`
 
 ### Step 2: Install Dependencies for the frontend
@@ -90,7 +92,7 @@ Run using the app using `npm run dev` command.
 
 ### Step 1: Fork and clone the backend
 
-Fork the repo and clone the  [backend repo]("https://github.com/Taha0229/QueryVerse-backend") on your local machine using, so you can modify and push to your own repo/code:
+Fork the repo and clone the  [backend repo](https://github.com/Taha0229/QueryVerse-backend) on your local machine using, so you can modify and push to your own repo/code:
 `git clone <url of forked repo>`
 
 ### Step 2: Create a python virtual environment
