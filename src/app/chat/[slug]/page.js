@@ -46,7 +46,7 @@ const ChatSlug = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://127.0.0.1:8000/v1/get-message-history?thread_id=${threadIdFromURL}`
+          `https://queryverse-backend.onrender.com/v1/get-message-history?thread_id=${threadIdFromURL}`
         );
         if (!response.ok) {
           throw new Error(`Error fetching data: ${response.status}`);
@@ -76,7 +76,7 @@ const ChatSlug = () => {
       if (conversationHistory.length === 0) {
         try {          
           const response = await fetch(
-            `http://127.0.0.1:8000/v1/get-conversation-history`
+            `https://queryverse-backend.onrender.com/v1/get-conversation-history`
           );
           if (!response.ok) {
             throw new Error(`Error fetching data: ${response.status}`);
@@ -113,7 +113,7 @@ const ChatSlug = () => {
 
         <div className="col-span-6 h-full bg-white relative flex flex-col mx-auto w-full">
           <LogoSection />
-          <div className="chat h-full relative mt-2">
+          <div className="chat h-full relative mt-2 pb-28">
             {data.map((conversation) => {
               return (
                 <div

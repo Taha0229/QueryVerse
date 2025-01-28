@@ -58,7 +58,7 @@ export default function InputBar() {
 
       try {
         const response = await fetch(
-          "http://127.0.0.1:8000/v1/query-verse-agent",
+          "https://queryverse-backend.onrender.com/v1/query-verse-agent",
           {
             method: "POST",
             headers: {
@@ -85,7 +85,7 @@ export default function InputBar() {
             };
             try {
               const response = await fetch(
-                "http://127.0.0.1:8000/v1/add-conversation-history",
+                "https://queryverse-backend.onrender.com/v1/add-conversation-history",
                 {
                   method: "POST",
                   headers: {
@@ -118,16 +118,16 @@ export default function InputBar() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-end w-full pb-4 sticky bottom-0 z-50 bg-white">
+    <div className="flex flex-col items-end justify-end w-2/3 pb-4 fixed bottom-0 z-50 bg-white">
       <form
         onSubmit={handleSubmit}
-        className="relative w-full max-w-3xl flex items-center pe-14 pb-10 bg-gray-200 rounded-2xl "
+        className="relative w-full max-w-3xl flex items-end pe-14 pb-10 -translate-x-12 bg-gray-200 rounded-2xl "
       >
         <textarea
           value={inputText}
           onChange={handleInputChange}
           placeholder="Message QueryVerse"
-          className={`w-full px-4 py-2 pt-3 rounded-tl-2xl bg-gray-200 placeholder:text-gray-600 resize-none focus:outline-none ${scrollable ? "overflow-y-auto" : "overflow-y-hidden"}`}
+          className={`w-full px-4 py-2 pt-3 rounded-tl-2xl  bg-gray-200 placeholder:text-gray-600 resize-none focus:outline-none ${scrollable ? "overflow-y-auto" : "overflow-y-hidden"}`}
           style={{ height: inputHeight, maxHeight: "200px" }}
         />
         <button
