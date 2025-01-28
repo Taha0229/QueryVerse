@@ -6,7 +6,7 @@
 
 QueryVerse is a multi-agent system which combines three specialized agents - RAG, SQL and Conversational Agent to streamline inventory analytics using natural language, making it feel like you're directly talking with your inventory.  
 
-**Access the frontend from** [here]("https://query-verse-nine.vercel.app/")
+**Access the frontend from** [here]("https://query-verse-nine.vercel.app/")  
 **Access the backend from** [here]("https://queryverse-backend.onrender.com/docs") (Swagger UI)
 
 ## What's Special?
@@ -48,8 +48,8 @@ Will update more later
 ![public/supervisor_agent.png](public/supervisor_agent.png)  
 3. RAG Agent:  
 ![public/rag_agent.png](public/rag_agent.png)  
-4. RAG Agent:  
-![public/rag_agent.png](public/rag_agent.png)
+4. SQL Agent:  
+![public/sql_agent.png](public/sql_agent.png)
 
 ## Objectives
 
